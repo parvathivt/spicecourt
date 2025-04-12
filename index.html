@@ -9,7 +9,9 @@
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-
+<div id="loader">
+  <img src="images/loader.gif" alt="Loading..." />
+</div>
 <!-- Flipbook Container -->
 <div id="flipbook">
   <div class="hard"><img src="./images/Pg1.jpg" /></div>
@@ -52,9 +54,27 @@
 <button id="next" class="nav-button">&#10095;</button>
 
 <script>
-let flipbook;
 
-updateNavButtons();
+
+const imageSources = [
+  "images/Pg1.jpg", "images/Pg2.jpg", "images/Pg3.jpg", "images/Pg4.jpg", "images/Pg5.jpg", "images/Pg6.jpg", "images/Pg7.jpg", "images/Pg8.jpg", "images/Pg9.jpg", "images/Pg10.jpg", "images/Pg11.jpg", "images/Pg12.jpg", "images/Pg13.jpg", "images/Pg14.jpg", "images/Pg15.jpg", "images/Pg16.jpg", "images/Pg17.jpg", "images/Pg18.jpg", "images/Pg19.jpg", "images/Pg20.jpg", "images/Pg21.jpg", "images/Pg22.jpg", "images/Pg23.jpg", "images/Pg24.jpg", "images/Pg25.jpg", "images/Pg26.jpg", "images/Pg27.jpg", "images/Pg28.jpg", "images/Pg29.jpg", "images/Pg30.jpg", "images/Pg31.jpg", "images/Pg32.jpg" 
+];
+
+
+function preloadImages(images, callback) {
+  let loadedCount = 0;
+
+  images.forEach((src) => {
+    const img = new Image();
+    img.src = src;
+    img.onload = img.onerror = () => {
+      loadedCount++;
+      if (loadedCount === images.length) {
+        callback();
+      }
+    };
+  });
+}
 
 function updateNavButtons() {
   const totalPages = $('#flipbook').turn('pages');
@@ -134,7 +154,16 @@ $('#next').click(() => {
   $('#flipbook').turn('next');
 });
 
-window.addEventListener('load', initFlipbook);
+let flipbook;
+
+window.addEventListener('load', () => {
+  preloadImages(imageSources, () => {
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('flipbook').style.display = 'block';
+    initFlipbook();
+  });
+});
+updateNavButtons();
 window.addEventListener('resize', initFlipbook);
 </script>
 
