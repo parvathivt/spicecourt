@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Hotel Maurya Patna Menu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <script src="./jquery-3.6.0.min.js"></script>
+  <script src="./turn.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<!-- Flipbook Container -->
+<div id="flipbook">
+  <div class="hard"><img src="./images/Pg1.jpg" /></div>
+  <div class="page"><img src="./images/Pg2.jpg" /></div>
+  <div class="page"><img src="./images/Pg3.jpg" /></div>
+  <div class="page"><img src="./images/Pg4.jpg" /></div>
+  <div class="page"><img src="./images/Pg5.jpg" /></div>
+  <div class="page"><img src="./images/Pg6.jpg" /></div>
+  <div class="page"><img src="./images/Pg7.jpg" /></div>
+  <div class="page"><img src="./images/Pg8.jpg" /></div>
+  <div class="page"><img src="./images/Pg9.jpg" /></div>
+  <div class="page"><img src="./images/Pg10.jpg" /></div>
+  <div class="page"><img src="./images/Pg11.jpg" /></div>
+  <div class="page"><img src="./images/Pg12.jpg" /></div>
+  <div class="page"><img src="./images/Pg13.jpg" /></div>
+  <div class="page"><img src="./images/Pg14.jpg" /></div>
+  <div class="page"><img src="./images/Pg15.jpg" /></div>
+  <div class="page"><img src="./images/Pg16.jpg" /></div>
+  <div class="page"><img src="./images/Pg17.jpg" /></div>
+  <div class="page"><img src="./images/Pg18.jpg" /></div>
+  <div class="page"><img src="./images/Pg19.jpg" /></div>
+  <div class="page"><img src="./images/Pg20.jpg" /></div>
+  <div class="page"><img src="./images/Pg21.jpg" /></div>
+  <div class="page"><img src="./images/Pg22.jpg" /></div>
+  <div class="page"><img src="./images/Pg23.jpg" /></div>
+  <div class="page"><img src="./images/Pg24.jpg" /></div>
+  <div class="page"><img src="./images/Pg25.jpg" /></div>
+  <div class="page"><img src="./images/Pg26.jpg" /></div>
+  <div class="page"><img src="./images/Pg27.jpg" /></div>
+  <div class="page"><img src="./images/Pg28.jpg" /></div>
+  <div class="page"><img src="./images/Pg29.jpg" /></div>
+  <div class="page"><img src="./images/Pg30.jpg" /></div>
+  <div class="page"><img src="./images/Pg31.jpg" /></div>
+  <div class="hard"><img src="./images/Pg32.jpg" /></div>
+  <!-- Add more pages here -->
+</div>
+
+<!-- Navigation Arrows -->
+<button id="prev" class="nav-button">&#10094;</button>
+<button id="next" class="nav-button">&#10095;</button>
+
+<script>
+let flipbook;
+
+updateNavButtons();
+
+function updateNavButtons() {
+  const totalPages = $('#flipbook').turn('pages');
+  const currentPage = $('#flipbook').turn('page');
+
+  // Disable left on first page
+  if (currentPage === 1) {
+    $('#prev').prop('disabled', true).css({ opacity: 0.3, cursor: 'default' });
+  } else {
+    $('#prev').prop('disabled', false).css({ opacity: 1, cursor: 'pointer' });
+  }
+
+  // Disable right on last page
+  if (currentPage === totalPages) {
+    $('#next').prop('disabled', true).css({ opacity: 0.3, cursor: 'default' });
+  } else {
+    $('#next').prop('disabled', false).css({ opacity: 1, cursor: 'pointer' });
+  }
+}
+
+function initFlipbook() {
+  const isMobile = window.innerWidth < 768;
+
+  const imgWidth = 1000;
+  const imgHeight = 1333;
+  const aspect = imgWidth / imgHeight;
+
+  let pageWidth = isMobile ? window.innerWidth : window.innerWidth / 2;
+  let pageHeight = pageWidth / aspect;
+
+  if (pageHeight > window.innerHeight) {
+    pageHeight = window.innerHeight;
+    pageWidth = pageHeight * aspect;
+  }
+
+  const bookWidth = isMobile ? pageWidth : pageWidth * 2;
+
+  const $flipbook = $('#flipbook');
+  $flipbook.css({
+    width: bookWidth + 'px',
+    height: pageHeight + 'px'
+  });
+
+  // Set page sizes
+  $('.page').css({
+    width: pageWidth + 'px',
+    height: pageHeight + 'px'
+  });
+
+  // Recreate the flipbook
+  if (flipbook) {
+    $flipbook.turn('destroy').html($flipbook.html());
+  }
+
+  $flipbook.turn({
+    width: bookWidth,
+    height: pageHeight,
+    display: isMobile ? 'single' : 'double',
+    autoCenter: true,
+    acceleration: true,
+    gradients: true,
+    elevation: 50,
+    when: {
+      turned: function () {
+        updateNavButtons(); // update buttons on each turn
+      }
+    }
+  });
+
+  flipbook = $flipbook;
+}
+
+$('#prev').click(() => {
+  $('#flipbook').turn('previous');
+});
+$('#next').click(() => {
+  $('#flipbook').turn('next');
+});
+
+window.addEventListener('load', initFlipbook);
+window.addEventListener('resize', initFlipbook);
+</script>
+
+</body>
+</html>
